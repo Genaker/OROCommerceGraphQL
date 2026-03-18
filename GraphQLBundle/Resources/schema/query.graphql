@@ -1,0 +1,14 @@
+"""
+Root Query type – entry point for all GraphQL read operations.
+
+Composed from multiple schema files (product.graphql, etc.).
+To add new queries, either extend this type or reference it in domain-specific files.
+"""
+
+type Query {
+  """
+  Placeholder for composed queries.
+  Actual queries are defined in schema extensions (e.g., product.graphql).
+  """
+  _composed: Boolean
+}

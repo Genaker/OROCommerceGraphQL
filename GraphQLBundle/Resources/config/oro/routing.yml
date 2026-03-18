@@ -1,0 +1,21 @@
+# ── GenakerGraphQLBundle routes ──────────────────────────────────────────────
+#
+# GraphQL endpoint (protected by the api_secured OAuth2 Bearer firewall).
+# Path: /admin/api/graphql  (uses %oro_api.rest.prefix% = /admin/api/)
+# → this falls under the api_secured firewall pattern ^/admin/api/
+
+genaker_graphql_execute:
+    path:     '%oro_api.rest.prefix%graphql'
+    methods:  [POST]
+    defaults:
+        _controller: 'Genaker\Bundle\GraphQLBundle\Controller\GraphQLController::executeAction'
+    options:
+        group: rest_api
+
+genaker_graphql_introspect:
+    path:     '%oro_api.rest.prefix%graphql'
+    methods:  [GET]
+    defaults:
+        _controller: 'Genaker\Bundle\GraphQLBundle\Controller\GraphQLController::introspectAction'
+    options:
+        group: rest_api

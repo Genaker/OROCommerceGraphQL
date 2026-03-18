@@ -1,0 +1,81 @@
+"""
+Shared types and scalars used across all GraphQL resources.
+"""
+
+# ─ Scalar Types ──────────────────────────────────────────────────────────────
+
+"""
+The `Int` scalar type represents non-fractional signed whole numeric values.
+Int can represent values between -2,147,483,648 and 2,147,483,647.
+"""
+scalar Int
+
+"""
+The `String` scalar type represents textual data, represented as UTF-8
+character sequences. The String type is most often used by GraphQL to
+represent free-form human-readable text.
+"""
+scalar String
+
+"""
+The `Boolean` scalar type represents `true` or `false`.
+"""
+scalar Boolean
+
+"""
+The `ID` scalar type represents a unique identifier, often used to
+re-fetch an object or as key for a cache. The ID type appears in a JSON
+response as a String; however, it is not intended to be human-readable.
+When expected as an input type, any string (such as "4") or integer
+(such as 4) input value will be accepted as an ID.
+"""
+scalar ID
+
+"""
+ISO 8601 date-time string (example: 2026-03-18T12:30:45Z)
+"""
+scalar DateTime
+
+# ─ Common Interfaces ────────────────────────────────────────────────────────
+
+"""
+Represents an entity with standard timestamps.
+"""
+interface Timestamped {
+  """Creation timestamp (ISO 8601 format)"""
+  createdAt: DateTime!
+  
+  """Last modification timestamp (ISO 8601 format)"""
+  updatedAt: DateTime!
+}
+
+# ─ Common Types ──────────────────────────────────────────────────────────────
+
+"""
+Generic error response type.
+Contains HTTP-style error codes and messages.
+"""
+type Error {
+  """Machine-readable error code (e.g., "PRODUCT_NOT_FOUND")"""
+  code: String!
+  
+  """Human-readable error message"""
+  message: String!
+  
+  """Additional error details (optional)"""
+  details: String
+}
+
+"""
+Generic success/failure mutation result.
+"""
+type MutationResult {
+  """Whether the mutation succeeded"""
+  success: Boolean!
+  
+  """List of errors (empty if success=true)"""
+  errors: [Error!]!
+  
+  """Optional message"""
+  message: String
+}

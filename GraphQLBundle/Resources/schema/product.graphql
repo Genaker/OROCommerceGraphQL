@@ -1,0 +1,130 @@
+"""
+Product GraphQL types and queries.
+
+This schema defines the Product entity and related queries.
+Can be extended with new fields by adding new schema files.
+"""
+
+# ─ Product Type ──────────────────────────────────────────────────────────────
+
+"""
+Represents an OroCommerce product.
+
+Implementers can extend this type with domain-specific fields:
+  - Pricing information
+  - Inventory levels
+  - Marketing attributes
+  - Custom data fields
+"""
+type Product implements Timestamped {
+  """Unique product identifier"""
+  id: ID!
+  
+  """Product SKU (Stock Keeping Unit) – unique code for inventory"""
+  sku: String!
+  
+  """Product display name"""
+  name: String!
+  
+  """Product status (enabled, disabled, etc.)"""
+  status: String!
+  
+  """Product type (simple, configurable, kit, bundled, etc.)"""
+  type: String!
+  
+  """Feature flag – whether product is featured/highlighted"""
+  featured: Boolean!
+  
+  """Creation timestamp"""
+  createdAt: DateTime!
+  
+  """Last modification timestamp"""
+  updatedAt: DateTime!
+}
+
+# ─ ProductConnection Type ────────────────────────────────────────────────────
+
+"""
+Cursor-based pagination wrapper for Product lists.
+
+Implements Relay-style cursor pagination for efficient traversal of large datasets.
+Cursor-based pagination is more efficient than offset-based for large tables
+because it doesn't require scanning N rows to find the starting point.
+"""
+type ProductConnection {
+  """Array of Product objects for the current page"""
+  items: [Product!]!
+  
+  """Total number of products matching the query (not limited by pagination)"""
+  totalCount: Int!
+  
+  """Whether there are more results after the current page"""
+  hasNextPage: Boolean!
+  
+  """Whether there are results before the current page"""
+  hasPreviousPage: Boolean!
+  
+  """Opaque cursor for the first item in this page (base64 encoded offset)"""
+  startCursor: String
+  
+  """Opaque cursor for pagination to the next page"""
+  endCursor: String
+}
+
+# ─ Product Input Types ───────────────────────────────────────────────────────
+
+"""
+Input type for filtering products in list queries.
+
+All fields are optional and combined with AND logic.
+"""
+input ProductFilterInput {
+  """Filter by exact SKU"""
+  sku: String
+  
+  """Filter by status ("enabled" or "disabled")"""
+  status: String
+  
+  """Filter by product type ("simple", "configurable", "kit", etc.)"""
+  type: String
+  
+  """Filter by featured flag"""
+  featured: Boolean
+}
+
+# ─ Product Query Extensions ─────────────────────────────────────────────────
+
+"""
+Product query extension for the root Query type.
+
+These fields are composed into the root Query at runtime.
+"""
+extend type Query {
+  """
+  Fetch a single product by its primary key.
+  
+  Args:
+    id: Product ID (PK)
+    
+  Returns: Product object or null if not found or inaccessible
+  """
+  product(id: Int!): Product
+  
+  """
+  Paginated product list with filtering and cursor-based navigation.
+  
+  Args:
+    filters:  Optional product filters (combined with AND logic)
+    limit:    Max results per page (default 20, max 100)
+    offset:   Page offset (ignored when `after` cursor is provided)
+    after:    Opaque cursor from endCursor of a previous response
+    
+  Returns: ProductConnection with items, pagination info, and totalCount
+  """
+  products(
+    filters: ProductFilterInput
+    limit: Int
+    offset: Int
+    after: String
+  ): ProductConnection!
+}

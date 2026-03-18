@@ -1,0 +1,2 @@
+bundles:
+  - { name: Genaker\Bundle\GraphQLBundle\GenakerGraphQLBundle, priority: 500 }

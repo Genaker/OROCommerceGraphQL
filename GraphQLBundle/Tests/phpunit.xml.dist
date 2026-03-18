@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    GraphQL Bundle integration test suite.
+
+    Run from the project root:
+      bin/phpunit -c src/Genaker/Bundle/GraphQLBundle/Tests/phpunit.xml.dist
+
+    Requires: running Symfony dev server on port 8000.
+    Start it with:
+      symfony server:start -d
+        -flag- port=8000
+        -flag- allow-all-ip
+        -flag- listen-ip=0.0.0.0
+-->
+<phpunit
+    bootstrap="../../../../../config/bootstrap_real.php"
+    verbose="true"
+    colors="true">
+    <testsuites>
+        <testsuite name="GraphQL">
+            <directory>.</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="ORO_ENV" value="dev"/>
+        <env name="APP_ENV" value="dev" force="true"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled"/>
+        <env name="KERNEL_CLASS" value="AppKernel"/>
+        <env name="ORO_DB_URL" value="postgres://oro_db_user:oro_db_pass@pgsql:5432/oro_db_uat?sslmode=disable&amp;charset=utf8&amp;serverVersion=13.7" force="true"/>
+    </php>
+</phpunit>

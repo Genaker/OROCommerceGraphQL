@@ -1,0 +1,2 @@
+genaker_graphql_routes:
+    resource: '@GenakerGraphQLBundle/Resources/config/oro/routing.yml'

@@ -1,0 +1,23 @@
+"""
+GraphQL mutation types.
+
+Defines all mutation operations across the API.
+New mutations can be added by creating new schema extensions or modifying this file.
+"""
+
+# ─ Mutation Type ────────────────────────────────────────────────────────────
+
+type Mutation {
+  """
+  Fake mutation that always returns true.
+  
+  Used for testing mutation infrastructure and client implementations.
+  Safe to invoke – performs no side effects.
+  
+  Args:
+    message: Optional message to include in the mutation (currently ignored)
+    
+  Returns: Boolean (always true)
+  """
+  testMutation(message: String): Boolean!
+}

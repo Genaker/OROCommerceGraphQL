@@ -1,0 +1,49 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  # ── Schema layer ─────────────────────────────────────────────────────────
+
+  Genaker\Bundle\GraphQLBundle\Schema\Type\ProductType:
+    # Shared, lazily-loaded type instance (webonyx re-uses type objects)
+    shared: true
+
+  Genaker\Bundle\GraphQLBundle\Schema\Type\ProductConnectionType:
+    shared: true
+    arguments:
+      $productType: '@Genaker\Bundle\GraphQLBundle\Schema\Type\ProductType'
+
+  Genaker\Bundle\GraphQLBundle\Schema\Resolver\ProductResolver:
+    arguments:
+      $em: '@doctrine.orm.entity_manager'
+
+  Genaker\Bundle\GraphQLBundle\Schema\Resolver\MutationResolver:
+    # no arguments needed
+
+  Genaker\Bundle\GraphQLBundle\Schema\Type\QueryType:
+    arguments:
+      $productType:           '@Genaker\Bundle\GraphQLBundle\Schema\Type\ProductType'
+      $productConnectionType: '@Genaker\Bundle\GraphQLBundle\Schema\Type\ProductConnectionType'
+      $productResolver:       '@Genaker\Bundle\GraphQLBundle\Schema\Resolver\ProductResolver'
+
+  Genaker\Bundle\GraphQLBundle\Schema\Type\MutationType:
+    arguments:
+      $mutationResolver: '@Genaker\Bundle\GraphQLBundle\Schema\Resolver\MutationResolver'
+
+  Genaker\Bundle\GraphQLBundle\Schema\SchemaFactory:
+    arguments:
+      $productType:   '@Genaker\Bundle\GraphQLBundle\Schema\Type\ProductType'
+      $queryType:     '@Genaker\Bundle\GraphQLBundle\Schema\Type\QueryType'
+      $mutationType:  '@Genaker\Bundle\GraphQLBundle\Schema\Type\MutationType'
+
+  # ── Controller ───────────────────────────────────────────────────────────
+
+  Genaker\Bundle\GraphQLBundle\Controller\GraphQLController:
+    public: true
+    arguments:
+      $schemaFactory: '@Genaker\Bundle\GraphQLBundle\Schema\SchemaFactory'
+      $debugMode:     '%kernel.debug%'
+    tags:
+      - { name: controller.service_arguments }

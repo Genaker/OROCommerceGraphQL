@@ -1,0 +1,35 @@
+"""
+Genaker GraphQL Schema (Composite)
+
+This is the MAIN entry point for the GraphQL schema.
+It composes modular schema files from the schema/ directory:
+
+  - schema/shared-types.graphql      Scalars, interfaces, common types
+  - schema/query.graphql             Root Query type
+  - schema/mutation.graphql          Root Mutation type
+  - schema/product.graphql           Product type and product queries
+
+To add new resources or extend the schema:
+  1. Create a new schema/{resource}.graphql file
+  2. Use `type`, `extend type Query`, or `extend type Mutation` directives
+  3. The schema composition system automatically includes it
+
+Example new resource file (order.graphql):
+
+  \"\"\"Order GraphQL types\"\"\"
+  
+  type Order {
+    id: ID!
+    orderNumber: String!
+    status: String!
+  }
+  
+  extend type Query {
+    order(id: Int!): Order
+    orders(status: String): [Order!]!
+  }
+"""
+
+# ─ Shared types and scalars ──────────────────────────────────────────────────
+# Source: schema/shared-types.graphql
+
